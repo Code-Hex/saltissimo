@@ -13,6 +13,7 @@
 package saltissimo
 
 import (
+	"crypto/subtle"
 	"encoding/base64"
 	"encoding/hex"
 
@@ -34,7 +35,7 @@ func CompareHexHash(hash func() hash.Hash, str, hexStr, key string) (bool, error
 	}
 
 	sum := pbkdf2.Key([]byte(str), kb, Iter, KeyLength, hash)
-	return compare(sum, orig), nil
+	return subtle.ConstantTimeCompare(sum, orig) == 1, nil
 }
 
 // CompareB64Hash to compare passed string and PBDKF2 as base64 string.
@@ -50,18 +51,5 @@ func CompareB64Hash(hash func() hash.Hash, str, b64Str, key string) (bool, error
 	}
 
 	sum := pbkdf2.Key([]byte(str), kb, Iter, KeyLength, hash)
-	return compare(sum, orig), nil
-}
-
-func compare(a, b []byte) bool {
-	if len(a) != len(b) {
-		return false
-	}
-
-	var result byte
-	for i := 0; i < len(a); i++ {
-		result |= a[i] ^ b[i]
-	}
-
-	return result == 0
+	return subtle.ConstantTimeCompare(sum, orig) == 1, nil
 }

@@ -10,9 +10,10 @@ import (
 )
 
 // SaltLength specifies the length of a random byte sequence.
+// KeyLength, Iter for pbkdf2.Key arguments.
 var (
-	KeyLength  = 32
 	SaltLength = 36
+	KeyLength  = 32
 	Iter       = 4096
 )
 
