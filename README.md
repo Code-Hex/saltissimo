@@ -3,8 +3,7 @@
 Easy generate, easy compare hash using pbkdf2.
 # Why developed?
 Because, It was troublesome to write code for managing customers password for each service.  
-I adopted the safe pbkdf2 method as possible.  
-Salt is included in the name, but what we need in this library is a secret key.
+I adopted the safe pbkdf2 method as possible.
 # You have used HMAC, haven't you?
 Yes. I changed it because there was a security problem.  
 See [reddit](https://redd.it/5c57kf).
