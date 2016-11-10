@@ -29,7 +29,7 @@ func TestCompareSHA512(t *testing.T) {
 func compareHexTest(t *testing.T, hash func() hash.Hash) {
 	hex, salt, err := HexHash(hash, password)
 	if err != nil {
-		t.Fatalf("Get error on HmacHex(): %s", err.Error())
+		t.Fatalf("Get error on HexHash(): %s", err.Error())
 	}
 	got, err := CompareHexHash(hash, password, hex, salt)
 	if err != nil {
@@ -42,7 +42,7 @@ func compareHexTest(t *testing.T, hash func() hash.Hash) {
 func compareB64Test(t *testing.T, hash func() hash.Hash) {
 	b64, salt, err := B64Hash(hash, password)
 	if err != nil {
-		t.Fatalf("Get error on HmacB64(): %s", err.Error())
+		t.Fatalf("Get error on B64Hash(): %s", err.Error())
 	}
 
 	got, err := CompareB64Hash(hash, password, b64, salt)

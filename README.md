@@ -1,9 +1,9 @@
 # saltissimo
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/Code-Hex/saltissimo) [![Go Report Card](https://goreportcard.com/badge/github.com/Code-Hex/saltissimo)](https://goreportcard.com/report/github.com/Code-Hex/saltissimo)  
-Easy generate, easy compare hash using hmac.
+Easy generate, easy compare hash using pbkdf2.
 # Why developed?
 Because, It was troublesome to write code for managing customers password for each service.  
-I adopted the safe and fast HMAC method as possible.  
+I adopted the safe pbkdf2 method as possible.  
 Salt is included in the name, but what we need in this library is a secret key.
 # Synopsis
 ```go
@@ -44,8 +44,8 @@ func Compare(gotValue, hash, key string) bool {
 If you want to devise a little more, you can be happy by using these function.
 
 ```go
-func HmacToHex(hash func() hash.Hash, str string, key []byte) string
-func HmacToB64(hash func() hash.Hash, str string, key []byte) string
+func PBDKF2Hex(hash func() hash.Hash, str string, key []byte) string
+func PBDKF2B64(hash func() hash.Hash, str string, key []byte) string
 func RandomBytes(l int) ([]byte, error)
 ```
 Please read [GoDoc](https://godoc.org/github.com/Code-Hex/saltissimo) or [test](https://github.com/Code-Hex/saltissimo/blob/master/generate_test.go) for details.

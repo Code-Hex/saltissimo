@@ -1,7 +1,6 @@
 package saltissimo
 
 import (
-	"crypto/hmac"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
@@ -9,6 +8,8 @@ import (
 	"encoding/hex"
 	"hash"
 	"testing"
+
+	"golang.org/x/crypto/pbkdf2"
 )
 
 const password = "abcdefghijkl"
@@ -44,10 +45,9 @@ func generateB64Test(t *testing.T, hash func() hash.Hash) {
 		t.Fatalf("Get error on hex.DecodeString(salt): %s", err.Error())
 	}
 
-	h := hmac.New(hash, saltBytes)
-	h.Write([]byte(password))
+	sum := pbkdf2.Key([]byte(password), saltBytes, Iter, KeyLength, hash)
 
-	Equal(t, h.Sum(nil), decoded, "got %s, expected %s", string(decoded), password)
+	Equal(t, sum, decoded, "got %s, expected %s", string(decoded), password)
 }
 
 func generateHexTest(t *testing.T, hash func() hash.Hash) {
@@ -66,8 +66,7 @@ func generateHexTest(t *testing.T, hash func() hash.Hash) {
 		t.Fatalf("Get error on hex.DecodeString(salt): %s", err.Error())
 	}
 
-	h := hmac.New(hash, saltBytes)
-	h.Write([]byte(password))
+	sum := pbkdf2.Key([]byte(password), saltBytes, Iter, KeyLength, hash)
 
-	Equal(t, h.Sum(nil), decoded, "got %s, expected %s", string(decoded), password)
+	Equal(t, sum, decoded, "got %s, expected %s", string(decoded), password)
 }
