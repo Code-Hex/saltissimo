@@ -13,7 +13,10 @@
 package saltissimo
 
 import (
+	"crypto/hmac"
+	"encoding/base64"
 	"encoding/hex"
+
 	"hash"
 )
 
@@ -23,7 +26,15 @@ func CompareHexHash(hash func() hash.Hash, str, hexStr, key string) (bool, error
 	if err != nil {
 		return false, err
 	}
-	return HmacToHex(hash, str, kb) == hexStr, err
+
+	orig, err := hex.DecodeString(hexStr)
+	if err != nil {
+		return false, err
+	}
+
+	h := hmac.New(hash, kb)
+	h.Write([]byte(str))
+	return compare(h.Sum(nil), orig), nil
 }
 
 // CompareB64Hash to compare passed string and HMAC as base64 string.
@@ -32,5 +43,26 @@ func CompareB64Hash(hash func() hash.Hash, str, b64Str, key string) (bool, error
 	if err != nil {
 		return false, err
 	}
-	return HmacToB64(hash, str, kb) == b64Str, err
+
+	orig, err := base64.StdEncoding.DecodeString(b64Str)
+	if err != nil {
+		return false, err
+	}
+
+	h := hmac.New(hash, kb)
+	h.Write([]byte(str))
+	return compare(h.Sum(nil), orig), nil
+}
+
+func compare(a, b []byte) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	var result byte
+	for i := 0; i < len(a); i++ {
+		result |= a[i] ^ b[i]
+	}
+
+	return result == 0
 }
