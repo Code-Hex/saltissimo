@@ -43,7 +43,7 @@ func Compare(gotValue, hash, key string) bool {
     return isSame
 }
 ```
-If you want to devise a little more, you can be happy by using these function.
+If you want to devise a little more, you will be happy by using these function.
 
 ```go
 func PBDKF2Hex(hash func() hash.Hash, str string, key []byte) string
